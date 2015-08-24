@@ -22,7 +22,7 @@ public class Customer implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @Version int version;
 
@@ -44,11 +44,11 @@ public class Customer implements Serializable {
     @Lob
     private Point location;
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -159,6 +159,6 @@ public class Customer implements Serializable {
     }
 
     public boolean isPersisted() {
-        return id > 0;
+        return id != null;
     }
 }

@@ -2,14 +2,15 @@ package org.vaadin.backend;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+
 import org.vaadin.backend.domain.Customer;
 import org.vaadin.backend.domain.CustomerStatus;
 import org.vaadin.backend.domain.Gender;
 
 import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaQuery;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
@@ -19,34 +20,29 @@ public class CustomerService {
 
     @PersistenceContext(unitName = "customer-pu")
     private EntityManager entityManager;
+    
+    @Inject
+    ContactRepository repo;
 
     public void saveOrPersist(Customer entity) {
-        if (entity.getId() > 0) {
-            entityManager.merge(entity);
-        } else {
-            entityManager.persist(entity);
-        }
+    	repo.save(entity);
     }
 
     public void deleteEntity(Customer entity) {
-        if (entity.getId() > 0) {
-            // reattach to remove
-            entity = entityManager.merge(entity);
-            entityManager.remove(entity);
-        }
+    	repo.remove(repo.findBy(entity.getId()));
     }
 
     public List<Customer> findAll() {
-        CriteriaQuery<Customer> cq = entityManager.getCriteriaBuilder().
-                createQuery(Customer.class);
-        cq.select(cq.from(Customer.class));
-        return entityManager.createQuery(cq).getResultList();
+    	return repo.findAll();
     }
 
     public List<Customer> findByName(String filter) {
         if (filter == null || filter.isEmpty()) {
             return findAll();
         }
+        // DeltaSpike Data could handle this as well with method 
+        // naming convention, but using raw JPQL & named query
+        // as an example of raw JPA usage
         filter = filter.toLowerCase();
         return entityManager.createNamedQuery("Customer.findByName",
                 Customer.class)

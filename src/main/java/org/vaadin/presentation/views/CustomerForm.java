@@ -6,6 +6,7 @@ import org.vaadin.backend.CustomerService;
 import org.vaadin.backend.domain.Customer;
 import org.vaadin.backend.domain.CustomerStatus;
 import org.vaadin.backend.domain.Gender;
+import org.vaadin.viritin.MBeanFieldGroup;
 import org.vaadin.viritin.fields.MTextField;
 import org.vaadin.viritin.fields.TypedSelect;
 import org.vaadin.viritin.form.AbstractForm;
@@ -108,10 +109,10 @@ public class CustomerForm extends AbstractForm<Customer> {
             }
         });
     }
-
+    
     @Override
     protected void adjustResetButtonState() {
-        // always enabled in this form
+        // always enabled in this form, closes form
         getResetButton().setEnabled(true);
         getDeleteButton().setEnabled(getEntity() != null && getEntity().isPersisted());
     }
