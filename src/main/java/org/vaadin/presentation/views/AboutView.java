@@ -34,17 +34,19 @@ public class AboutView extends MVerticalLayout implements View {
         add(new RichText().withMarkDownResource("/about.md"));
 
         int records = service.findAll().size();
+        if(records == 0) {
+        	service.ensureTestData();
+        	records = service.findAll().size();
+        }
         add(new Label("There are " + records + " records in the DB."));
 
-        Button button = new Button("Fill test data into DB", new Button.ClickListener() {
+        Button button = new Button("Reset original test data into DB", new Button.ClickListener() {
             @Override
             public void buttonClick(Button.ClickEvent event) {
                 service.resetTestData();
                 ViewMenuUI.getMenu().navigateTo(CustomerListView.class);
             }
         });
-        button.setStyleName(ValoTheme.BUTTON_LARGE);
-        button.addStyleName(ValoTheme.BUTTON_PRIMARY);
         add(button);
 
         setMargin(new MarginInfo(false, true, true, true));

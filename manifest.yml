@@ -10,3 +10,5 @@ applications:
   path: target/vaadin-jpa-application.war
   services:
     - simplecrm-sqldb
+  env:
+    JBP_CONFIG_LIBERTY: 'app_archive: {features: [webProfile-7.0]}'
